@@ -1,7 +1,7 @@
 {
   "name": "crux-mcp",
   "version": "1.0.0",
-  "description": "",
+  "description": "MCP server for Chrome UX Report (CrUX) API",
   "main": "index.js",
   "bin": {
     "crux-mcp": "./build/index.js"
@@ -15,12 +15,12 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "tsc",
     "start": "node build/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": "mcp,modelcontextprotocol,crux,chrome-ux-report,core-web-vitals,performance,seo",
+  "author": "Kevin K. Lee",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
@@ -35,5 +35,9 @@
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "typescript": "^6.0.2"
+  },
+  "repository": "github:kevinkiklee/crux-mcp",
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
