@@ -2,7 +2,10 @@
 // src/index.ts
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import express from 'express';
+import cors from 'cors';
 import { CruxClient } from './crux-client';
 import { tools, parseToolArgs } from './tools';
 
@@ -40,9 +43,37 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("CrUX MCP Server running on stdio");
+  const port = process.env.PORT;
+
+  if (port) {
+    // HTTP/SSE Mode
+    const app = express();
+    app.use(cors());
+
+    let sseTransport: SSEServerTransport | null = null;
+
+    app.get('/sse', async (req, res) => {
+      sseTransport = new SSEServerTransport('/messages', res);
+      await server.connect(sseTransport);
+    });
+
+    app.post('/messages', async (req, res) => {
+      if (sseTransport) {
+        await sseTransport.handlePostMessage(req, res);
+      } else {
+        res.status(400).send('No active SSE connection');
+      }
+    });
+
+    app.listen(port, () => {
+      console.error(`CrUX MCP Server running on HTTP/SSE at port ${port}`);
+    });
+  } else {
+    // Stdio Mode
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    console.error("CrUX MCP Server running on stdio");
+  }
 }
 
 main().catch(err => {

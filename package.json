@@ -25,10 +25,14 @@
   "type": "commonjs",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "node-cache": "^5.1.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.2",
     "@types/node-cache": "^4.1.3",
