@@ -1,0 +1,7 @@
+node_modules/
+build/
+*.html
+*.md
+!docs/
+!README.md
+!CLAUDE.md
